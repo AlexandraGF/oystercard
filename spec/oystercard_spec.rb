@@ -20,4 +20,25 @@ describe Oystercard do
   it 'deducting from the oystercard balance' do
     expect { subject.deduct 2.40 }.to change{ subject.balance }.by -2.40
   end
+
+  it 'Checking if we are in our journey' do
+    allow(subject).to receive(:in_journey?).and_return(true)
+    expect(subject.in_journey?).to be true
+  end
+
+  it 'Checking if we are not in our journey' do
+    allow(subject).to receive(:in_journey?).and_return(false)
+    expect(subject.in_journey?).to be false
+  end
+
+  it 'touch in to change in_journey to be true' do
+    subject.touch_in
+    expect(subject.in_journey?).to be true
+  end
+
+  it 'touch out to change in_journey to be false' do
+    subject.touch_out
+    expect(subject.in_journey?).to be false
+  end
+
 end

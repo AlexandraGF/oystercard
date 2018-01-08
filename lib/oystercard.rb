@@ -1,10 +1,11 @@
 class Oystercard
-  attr_reader :balance
+  attr_reader :balance, :in_journey
   DEFAULT_CONSTANT = 0
   LIMIT = 90
 
   def initialize(balance = DEFAULT_CONSTANT)
     @balance = balance
+    @in_journey = false
   end
 
   def top_up(value)
@@ -13,7 +14,19 @@ class Oystercard
   end
 
   def deduct(fare)
-    @balance -= fare 
+    @balance -= fare
+  end
+
+  def in_journey?
+    @in_journey
+  end
+
+  def touch_in
+    @in_journey = true
+  end
+
+  def touch_out
+    @in_journey = false
   end
 
 end
