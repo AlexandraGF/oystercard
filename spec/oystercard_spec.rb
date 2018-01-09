@@ -2,7 +2,7 @@ require './lib/oystercard.rb'
 
 describe Oystercard do
 
-  let(:station){ double :station }
+  # let(:station){ double :station }
   let(:entry_station){ double :entry_station, name: "Stockwell"}
 
   it 'checks oystercard balance' do
@@ -33,7 +33,7 @@ describe Oystercard do
 
   it 'touch in to change in_journey to be true' do
     subject.top_up(Oystercard::MINIM)
-    subject.touch_in(station)
+    subject.touch_in(entry_station)
     expect(subject.in_journey?).to be true
   end
 
@@ -43,7 +43,7 @@ describe Oystercard do
   end
 
   it 'raise error when not enough money' do
-    expect { subject.touch_in(station) }.to raise_error("Not enough money")
+    expect { subject.touch_in(entry_station) }.to raise_error("Not enough money")
   end
 
   it 'deduct the fare when touch_out' do
