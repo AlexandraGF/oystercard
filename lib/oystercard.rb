@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance, :in_journey
+  attr_reader :balance, :in_journey, :station
   DEFAULT_CONSTANT = 0
   LIMIT = 90
   MINIM = 1
@@ -7,6 +7,7 @@ class Oystercard
   def initialize(balance = DEFAULT_CONSTANT)
     @balance = balance
     @in_journey = false
+    @station = []
   end
 
   def top_up(value)
@@ -19,9 +20,10 @@ class Oystercard
   end
 
 
-  def touch_in
+  def touch_in(station)
     raise "Not enough money" if @balance < MINIM
     @in_journey = true
+    @station = station 
   end
 
   def touch_out
