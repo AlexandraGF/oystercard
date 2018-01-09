@@ -4,6 +4,7 @@ describe Oystercard do
 
   # let(:station){ double :station }
   let(:entry_station){ double :entry_station, name: "Stockwell"}
+  let(:exit_station) { double :exit_station, name: "Brixton" }
 
   it 'checks oystercard balance' do
     expect(subject.balance).to eq(0)
@@ -38,8 +39,10 @@ describe Oystercard do
   end
 
   it 'touch out to change in_journey to be false' do
-    subject.touch_out
-    expect(subject.in_journey?).to be false
+    # subject.top_up(5)
+    # subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect(subject.in_journey?).to be true
   end
 
   it 'raise error when not enough money' do
@@ -47,13 +50,22 @@ describe Oystercard do
   end
 
   it 'deduct the fare when touch_out' do
-    expect { subject.touch_out }.to change{ subject.balance }.by (-Oystercard::MINIM)
+    expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by (-Oystercard::MINIM)
   end
 
   it 'remember the entry station when touch in' do
     subject.top_up(5)
     subject.touch_in(entry_station.name)
     expect(subject.station).to eq("Stockwell")
+  end
+
+  it 'stores exit station' do
+    subject.top_up(6)
+    subject.touch_in(entry_station.name)
+
+    expect(subject.station).to eq("Stockwell")
+    subject.touch_out(exit_station.name)
+    expect(subject.station).to eq("Brixton")
   end
 
 end
