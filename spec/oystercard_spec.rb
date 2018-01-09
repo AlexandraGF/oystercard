@@ -32,6 +32,7 @@ describe Oystercard do
   end
 
   it 'touch in to change in_journey to be true' do
+    subject.top_up(Oystercard::MINIM)
     subject.touch_in
     expect(subject.in_journey?).to be true
   end
@@ -41,4 +42,11 @@ describe Oystercard do
     expect(subject.in_journey?).to be false
   end
 
+  it 'raise error when not enough money' do
+    expect { subject.touch_in }.to raise_error("Not enough money")
+  end
+
+  # it 'deduct the fare when touch_out' do
+  #   expect { subject.touch_out }.to change{ subject.balance }.by -1
+  # end
 end
