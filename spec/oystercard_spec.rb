@@ -17,10 +17,6 @@ describe Oystercard do
     expect { subject.top_up(90) }.to raise_error("Balance limit is #{Oystercard::LIMIT}")
   end
 
-  it 'deducting from the oystercard balance' do
-    expect { subject.deduct 2.40 }.to change{ subject.balance }.by -2.40
-  end
-
   it 'Checking if we are in our journey' do
     allow(subject).to receive(:in_journey?).and_return(true)
     expect(subject.in_journey?).to be true
@@ -46,7 +42,7 @@ describe Oystercard do
     expect { subject.touch_in }.to raise_error("Not enough money")
   end
 
-  # it 'deduct the fare when touch_out' do
-  #   expect { subject.touch_out }.to change{ subject.balance }.by -1
-  # end
+  it 'deduct the fare when touch_out' do
+    expect { subject.touch_out }.to change{ subject.balance }.by (-Oystercard::MINIM)
+  end
 end
