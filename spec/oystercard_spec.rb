@@ -2,7 +2,6 @@ require './lib/oystercard.rb'
 
 describe Oystercard do
 
-  # let(:station){ double :station }
   let(:entry_station){ double :entry_station, name: "Stockwell"}
   let(:exit_station) { double :exit_station, name: "Brixton" }
 
@@ -39,10 +38,8 @@ describe Oystercard do
   end
 
   it 'touch out to change in_journey to be false' do
-    # subject.top_up(5)
-    # subject.touch_in(entry_station)
     subject.touch_out(exit_station)
-    expect(subject.in_journey?).to be true
+    expect(subject.in_journey?).to be false
   end
 
   it 'raise error when not enough money' do
@@ -56,16 +53,14 @@ describe Oystercard do
   it 'remember the entry station when touch in' do
     subject.top_up(5)
     subject.touch_in(entry_station.name)
-    expect(subject.station).to eq("Stockwell")
+    expect(subject.entry_station).to eq("Stockwell")
   end
 
   it 'stores exit station' do
     subject.top_up(6)
     subject.touch_in(entry_station.name)
-
-    expect(subject.station).to eq("Stockwell")
     subject.touch_out(exit_station.name)
-    expect(subject.station).to eq("Brixton")
+    expect(subject.exit_station).to eq("Brixton")
   end
 
 end
