@@ -4,7 +4,7 @@ class Oystercard
   LIMIT = 90
   MINIM = 1
 
-  def initialize(balance = DEFAULT_CONSTANT)
+  def initialize(balance = DEFAULT_CONSTANT, history = Journey )
     @balance = balance
     @journeys = []
   end
