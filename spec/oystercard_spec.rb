@@ -46,8 +46,8 @@ describe Oystercard do
     expect { subject.touch_in(entry_station) }.to raise_error("Not enough money")
   end
 
-  it 'deduct the fare when touch_out' do
-    expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by (-Oystercard::MINIM)
+  it 'deducts a penalty when touching out without an entry' do
+    expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by (-Journey::PENALTY)
   end
 
   it 'remember the entry station when touch in' do
@@ -74,4 +74,25 @@ describe Oystercard do
     expect(subject.journeys).to eq ([{ :entry_station => "Stockwell", :exit_station => "Brixton"}])
   end
 
+end
+
+
+describe 'Journey accounting boundaries' do
+  it 'rejects invalid top-ups without changing balance' do
+    card = Oystercard.new
+    [-1, 0, Float::NAN, Float::INFINITY, '5'].each do |value|
+      expect { card.top_up(value) }.to raise_error(ArgumentError)
+    end
+    expect(card.balance).to eq(0)
+  end
+
+  it 'keeps completed journeys and charges a penalty for an abandoned entry' do
+    card = Oystercard.new(20)
+    card.touch_in('A')
+    card.touch_in('B')
+    card.touch_out('C')
+    expect(card.balance).to eq(20 - Journey::PENALTY - Journey::MINIM)
+    expect(card.journeys).to eq([{ entry_station: 'A', exit_station: nil }, { entry_station: 'B', exit_station: 'C' }])
+    expect(card.in_journey?).to be(false)
+  end
 end
