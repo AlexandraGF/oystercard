@@ -5,7 +5,7 @@ class Journey
   MINIM = 1
   PENALTY = 6
 
-  def initialize
+  def initialize(entry_station = nil)
     @entry_station = entry_station
     @exit_station = nil
   end
@@ -15,7 +15,7 @@ class Journey
   end
 
   def fare
-    return PENALTY if complete?
+    return PENALTY if incomplete?
     MINIM
   end
 
@@ -27,7 +27,7 @@ class Journey
 
   private
 
-  def complete?
+  def incomplete?
     @entry_station == nil || @exit_station == nil
   end
 end
